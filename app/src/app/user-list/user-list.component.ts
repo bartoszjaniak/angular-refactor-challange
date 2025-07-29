@@ -1,21 +1,26 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { UserService } from '../services/user.service';
-import { debounce, debounceTime, map, startWith, switchMap } from 'rxjs';
 import {
-  MatCell,
-  MatCellDef,
-  MatColumnDef,
-  MatHeaderCell,
-  MatHeaderCellDef,
-  MatHeaderRow,
-  MatHeaderRowDef,
-  MatRow,
-  MatRowDef,
-  MatTable,
-  MatTableDataSource,
-} from '@angular/material/table';
-import { Router, RouterModule } from '@angular/router';
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  ViewChild,
+  inject,
+} from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { UserService } from '../services/user.service';
+import {
+  BehaviorSubject,
+  combineLatest,
+  debounceTime,
+  map,
+  of,
+  startWith,
+  switchMap,
+  tap,
+} from 'rxjs';
+import { MatCell, MatCellDef, MatColumnDef, MatHeaderCell, MatHeaderCellDef, MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef, MatTable, MatTableDataSource } from '@angular/material/table';
+import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
+import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -29,31 +34,38 @@ import { MatInputModule } from '@angular/material/input';
   imports: [
     CommonModule,
     MatTable,
-    MatColumnDef,
-    MatHeaderCell,
-    MatCell,
-    MatHeaderRow,
-    MatRow,
-    MatHeaderCellDef,
-    MatCellDef,
-    MatHeaderRowDef,
-    MatRowDef,
+      MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
     RouterModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSortModule,
   ],
 })
 export class UserListComponent {
+
   private userService = inject(UserService);
 
   protected filter = new FormControl<string>('', { nonNullable: true });
 
-  protected usersDataSource$ = this.filter.valueChanges.pipe(
-    startWith(''),
-    debounceTime(300),
-    switchMap((filter) => this.userService.getUsers(filter)),
+  protected onSort$ = new BehaviorSubject<Sort | undefined>(undefined);
+
+  protected usersDataSource$ = combineLatest([
+    this.filter.valueChanges.pipe(startWith(''), debounceTime(300)),
+    this.onSort$.pipe(
+      map(sort => sort?.active ? sort.direction === 'asc' ? sort.active : `-${sort.active}` : undefined),
+    )
+  ]).pipe(
+    switchMap(([filter, sort]) => this.userService.getUsers(filter,0,5, sort)),
     map((users) => new MatTableDataSource(users))
   );
-
 }
