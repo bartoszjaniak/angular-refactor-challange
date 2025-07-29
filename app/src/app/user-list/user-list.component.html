@@ -1,14 +1,21 @@
 @if (usersDataSource$ | async; as dataSource) {
-<div>
-  <table
-    mat-table
-    [dataSource]="dataSource"
-    class="mat-elevation-z8"
-  >
+
+  <mat-form-field class="search" appearance="outline">
+    <mat-label>Wyszukaj użytkownika</mat-label>
+    <input
+      matInput
+      [formControl]="filter"
+      placeholder="Wpisz imię, rolę lub projekt"
+    />
+  </mat-form-field>
+
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef>Name</th>
       <td mat-cell *matCellDef="let user">
-        <a aria-label="Go to user details" [routerLink]="user.id"> {{ user.name }}</a>
+        <a aria-label="Go to user details" [routerLink]="user.id">
+          {{ user.name }}</a
+        >
       </td>
     </ng-container>
 
@@ -31,5 +38,4 @@
       *matRowDef="let row; columns: ['name', 'role', 'protectedProjects']"
     ></tr>
   </table>
-</div>
 }
