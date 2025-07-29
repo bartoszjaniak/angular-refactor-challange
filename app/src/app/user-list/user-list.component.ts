@@ -2,9 +2,9 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
-  ViewChild,
   inject,
+  OnDestroy,
+  OnInit,
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../services/user.service';
@@ -13,18 +13,34 @@ import {
   combineLatest,
   debounceTime,
   map,
-  of,
   startWith,
+  Subject,
   switchMap,
+  takeUntil,
   tap,
 } from 'rxjs';
-import { MatCell, MatCellDef, MatColumnDef, MatHeaderCell, MatHeaderCellDef, MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef, MatTable, MatTableDataSource } from '@angular/material/table';
-import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
+  MatTableDataSource,
+} from '@angular/material/table';
+import { MatSortModule, Sort } from '@angular/material/sort';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { Store } from '@ngrx/store';
+import { selectUsers } from '../store/store.selectors';
+import { loadUsers, setFilter, setPagination, setSort } from '../store/store.actions';
 
 @Component({
   selector: 'app-user-list',
@@ -50,27 +66,49 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
     MatFormFieldModule,
     MatInputModule,
     MatSortModule,
-    MatPaginatorModule
+    MatPaginatorModule,
   ],
 })
-export class UserListComponent {
+export class UserListComponent implements AfterViewInit, OnDestroy {
 
-  private userService = inject(UserService);
+  private destroy$ = new Subject<void>();
+  ngOnDestroy(): void {
+    this.destroy$.next();
+  }
+  ngAfterViewInit(): void {
+    this.store.dispatch(loadUsers());
 
+    this.filter.valueChanges.pipe(
+      debounceTime(300),
+      tap((value) => this.setFilter(value)),
+      takeUntil(this.destroy$)
+    ).subscribe();
+  }
   protected filter = new FormControl<string>('', { nonNullable: true });
 
-  protected onSort$ = new BehaviorSubject<Sort | undefined>(undefined);
+  private store = inject(Store);
 
-  protected onPageChanged$ = new BehaviorSubject<{ pageIndex: number, pageSize: number }>( { pageIndex: 0, pageSize: 10 });
+  protected users$ = this.store
+    .select(selectUsers)
+    .pipe(map((users) => new MatTableDataSource(users)));
 
-  protected usersDataSource$ = combineLatest([
-    this.filter.valueChanges.pipe(startWith(''), debounceTime(300)),
-    this.onSort$.pipe(
-      map(sort => sort?.active ? sort.direction === 'asc' ? sort.active : `-${sort.active}` : undefined),
-    ),
-    this.onPageChanged$
-  ]).pipe(
-    switchMap(([filter, sort, pagination]) => this.userService.getUsers(filter,pagination.pageIndex + 1, pagination.pageSize, sort)),
-    map((users) => new MatTableDataSource(users))
-  );
+  protected setSort(sort: Sort) {
+    this.store.dispatch(
+      setSort({
+        sort: sort.active
+          ? sort.direction === 'asc'
+            ? sort.active
+            : `-${sort.active}`
+          : '',
+      })
+    );
+  }
+
+  protected setPagination(pagination: { pageIndex: number; pageSize: number }) {
+    this.store.dispatch(setPagination(pagination));
+  }
+
+  protected setFilter(filter: string) {
+    this.store.dispatch(setFilter({ filter }));
+  }
 }

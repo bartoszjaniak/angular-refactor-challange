@@ -1,5 +1,5 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
-import {State} from './store.reducer'
+import { State } from './store.reducer';
 
 export const selectCounterState = createFeatureSelector<State>('user');
 
@@ -8,3 +8,16 @@ export const selectFavoriteUsers = createSelector(
   (state) => state.favoriteUsers
 );
 
+export const selectUsers = createSelector(
+  selectCounterState,
+  (state) => state.users
+);
+
+export const selectUserLoadParams = createSelector(
+  selectCounterState,
+  (state) => ({
+    filter: state.filter,
+    sort: state.sort,
+    pagination: state.pagination,
+  })
+);
