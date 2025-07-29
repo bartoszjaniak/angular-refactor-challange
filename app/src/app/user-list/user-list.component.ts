@@ -24,6 +24,7 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-user-list',
@@ -34,21 +35,22 @@ import { MatInputModule } from '@angular/material/input';
   imports: [
     CommonModule,
     MatTable,
-      MatCell,
-  MatCellDef,
-  MatColumnDef,
-  MatHeaderCell,
-  MatHeaderCellDef,
-  MatHeaderRow,
-  MatHeaderRowDef,
-  MatRow,
-  MatRowDef,
-  MatTable,
+    MatCell,
+    MatCellDef,
+    MatColumnDef,
+    MatHeaderCell,
+    MatHeaderCellDef,
+    MatHeaderRow,
+    MatHeaderRowDef,
+    MatRow,
+    MatRowDef,
+    MatTable,
     RouterModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatSortModule,
+    MatPaginatorModule
   ],
 })
 export class UserListComponent {
@@ -59,13 +61,16 @@ export class UserListComponent {
 
   protected onSort$ = new BehaviorSubject<Sort | undefined>(undefined);
 
+  protected onPageChanged$ = new BehaviorSubject<{ pageIndex: number, pageSize: number }>( { pageIndex: 0, pageSize: 10 });
+
   protected usersDataSource$ = combineLatest([
     this.filter.valueChanges.pipe(startWith(''), debounceTime(300)),
     this.onSort$.pipe(
       map(sort => sort?.active ? sort.direction === 'asc' ? sort.active : `-${sort.active}` : undefined),
-    )
+    ),
+    this.onPageChanged$
   ]).pipe(
-    switchMap(([filter, sort]) => this.userService.getUsers(filter,0,5, sort)),
+    switchMap(([filter, sort, pagination]) => this.userService.getUsers(filter,pagination.pageIndex + 1, pagination.pageSize, sort)),
     map((users) => new MatTableDataSource(users))
   );
 }

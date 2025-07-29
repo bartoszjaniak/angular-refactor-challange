@@ -3,7 +3,7 @@
 <mat-form-field class="search" appearance="outline">
   <mat-label>Wyszukaj użytkownika</mat-label>
   <input
-    matInput  
+    matInput
     [formControl]="filter"
     placeholder="Wpisz imię, rolę lub projekt"
   />
@@ -46,5 +46,14 @@
     *matRowDef="let row; columns: ['name', 'role', 'protectedProjects']"
   ></tr>
 </table>
+<!-- Musiałem użyć zmyślonej liczby bo api nie udostępnia ilości rekordów -->
+<mat-paginator
+  (page)="onPageChanged$.next($event)"
+  [length]="99999"
+  [pageSize]="10"
+  [pageSizeOptions]="[5, 10, 25, 100]"
+  aria-label="Select page"
+>
+</mat-paginator>
 
 }
