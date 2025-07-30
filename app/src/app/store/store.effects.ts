@@ -27,7 +27,7 @@ export class UsersEffects {
         this.userService
           .getUsers(filter, pagination.pageIndex + 1, pagination.pageSize, sort)
           .pipe(
-            map((users) => usersSuccesfullyLoaded({ users })),
+            map(({ users, total }) => usersSuccesfullyLoaded({ users, total })),
             catchError(() => EMPTY)
           )
       )

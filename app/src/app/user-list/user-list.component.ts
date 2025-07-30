@@ -39,7 +39,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { Store } from '@ngrx/store';
-import { selectUsers } from '../store/store.selectors';
+import { selectTotal, selectUsers } from '../store/store.selectors';
 import { loadUsers, setFilter, setPagination, setSort } from '../store/store.actions';
 
 @Component({
@@ -91,6 +91,8 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
   protected users$ = this.store
     .select(selectUsers)
     .pipe(map((users) => new MatTableDataSource(users)));
+
+  protected total$ = this.store.select(selectTotal);
 
   protected setSort(sort: Sort) {
     this.store.dispatch(

@@ -13,7 +13,7 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  getUsers(filter?: string, page?: number, pageSize?: number, sort?: string): Observable<User[]> {
+  getUsers(filter?: string, page?: number, pageSize?: number, sort?: string): Observable<{users: User[], total: number}> {
     const url = new URL(this.apiURL);
    
     if (filter) url.searchParams.append('filter', filter);
@@ -21,7 +21,9 @@ export class UserService {
     if (pageSize) url.searchParams.append('pageSize', pageSize.toString());
     if (sort) url.searchParams.append('sort', sort);
 
-    return this.http.get<{results: User[]}>(url.toString()).pipe(map(res => res.results));
+    return this.http.get<{results: User[], total: number}>(url.toString()).pipe(
+      map(res => ({ users: res.results, total: res.total }))
+    );
   }
 
   getUser(id: string) {

@@ -21,3 +21,8 @@ export const selectUserLoadParams = createSelector(
     pagination: state.pagination,
   })
 );
+
+export const selectTotal = createSelector(
+  selectCounterState,
+  (state) => state.total
+);

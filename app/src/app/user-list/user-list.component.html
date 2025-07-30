@@ -49,7 +49,7 @@
 <!-- Musiałem użyć zmyślonej liczby bo api nie udostępnia ilości rekordów -->
 <mat-paginator
   (page)="setPagination($event)"
-  [length]="99999"
+  [length]="total$ | async"
   [pageSize]="10"
   [pageSizeOptions]="[5, 10, 25, 100]"
   aria-label="Select page"

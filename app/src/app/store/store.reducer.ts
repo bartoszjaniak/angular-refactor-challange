@@ -18,6 +18,7 @@ export interface State {
     pageIndex: number;
     pageSize: number;
   };
+  total: number;
 }
 
 export const initialState: State = {
@@ -29,6 +30,7 @@ export const initialState: State = {
     pageIndex: 0,
     pageSize: 10,
   },
+  total: 0,
 };
 
 export const userReducer = createReducer(
@@ -56,8 +58,9 @@ export const userReducer = createReducer(
     ...state,
     favoriteUsers: state.favoriteUsers.filter((u) => u.id !== user.id),
   })),
-  on(usersSuccesfullyLoaded, (state, { users }) => ({
+  on(usersSuccesfullyLoaded, (state, { users, total }) => ({
     ...state,
     users,
+    total,
   }))
 );
