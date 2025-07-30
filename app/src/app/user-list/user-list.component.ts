@@ -35,10 +35,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { Store } from '@ngrx/store';
-import { selectTotal, selectUsers } from '../store/store.selectors';
+import { selectTotal, selectUsers } from '../store/users/users.selectors';
 import { selectFavoriteUserIds } from '../store/favorites/favorites.selectors';
 import { loadFavoritesFromStorage } from '../store/favorites/favorites.actions';
-import { loadUsers, setFilter, setPagination, setSort } from '../store/store.actions';
+import { loadUsers, setFilter, setPagination, setSort } from '../store/users/users.actions';
 
 @Component({
   selector: 'app-user-list',

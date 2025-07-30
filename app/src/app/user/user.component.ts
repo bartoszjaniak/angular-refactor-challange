@@ -10,12 +10,12 @@ import { Store } from '@ngrx/store';
 import { CommonModule } from '@angular/common';
 import { User } from '../models/user.model';
 import { WebsocketService } from '../services/websocket.service';
-import { loadCurrentUser } from '../store/store.actions';
+import { loadCurrentUser, synchronizeUser } from '../store/user/user.actions';
 import {
   selectCurrentUser,
   selectCurrentUserLoading,
   selectCurrentUserError,
-} from '../store/store.selectors';
+} from '../store/user/user.selectors';
 import {
   addUserToFavorites,
   removeUserFromFavorites,
@@ -73,6 +73,9 @@ export class UserComponent implements OnInit, OnDestroy {
       payload: user.id,
     });
     this.webSocketService.sendMessage(message);
+    
+    // Dispatch synchronization action to update both stores
+    this.store.dispatch(synchronizeUser({ user }));
   }
 
   removeFromFavorites(user: User) {

@@ -6,21 +6,17 @@ import {
   catchError,
   switchMap,
   withLatestFrom,
-  tap,
 } from 'rxjs/operators';
 import {
   loadUsers,
   setFilter,
   setPagination,
   setSort,
-  usersSuccesfullyLoaded,
-  loadCurrentUser,
-  currentUserSuccessfullyLoaded,
-  currentUserLoadFailed,
-} from './store.actions';
-import { UserService } from '../services/user.service';
+  usersSuccessfullyLoaded,
+} from './users.actions';
+import { UserService } from '../../services/user.service';
 import { Store } from '@ngrx/store';
-import { selectUserLoadParams } from './store.selectors';
+import { selectUserLoadParams } from './users.selectors';
 
 @Injectable({ providedIn: 'root' })
 export class UsersEffects {
@@ -32,25 +28,13 @@ export class UsersEffects {
     return this.actions$.pipe(
       ofType(loadUsers, setFilter, setSort, setPagination),
       withLatestFrom(this.store.select(selectUserLoadParams)),
-      switchMap(([action, { filter, sort, pagination }]) =>
+      switchMap(([, { filter, sort, pagination }]) =>
         this.userService
           .getUsers(filter, pagination.pageIndex + 1, pagination.pageSize, sort)
           .pipe(
-            map(({ users, total }) => usersSuccesfullyLoaded({ users, total })),
+            map(({ users, total }) => usersSuccessfullyLoaded({ users, total })),
             catchError(() => EMPTY)
           )
-      )
-    );
-  });
-
-  loadCurrentUser$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(loadCurrentUser),
-      switchMap(({ userId }) =>
-        this.userService.getUser(userId).pipe(
-          map((user) => currentUserSuccessfullyLoaded({ user })),
-          catchError((error) => [currentUserLoadFailed({ error })])
-        )
       )
     );
   });

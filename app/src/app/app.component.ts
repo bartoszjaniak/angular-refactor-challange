@@ -6,7 +6,7 @@ import {
   WebSocketMessage,
 } from './services/websocket-message-handler.service';
 import { Store } from '@ngrx/store';
-import { userSynchronize } from './store/store.actions';
+import { synchronizeUser } from './store/user/user.actions';
 import { loadFavoritesFromStorage } from './store/favorites/favorites.actions';
 import { User } from './models/user.model';
 import { Subscription } from 'rxjs';
@@ -60,7 +60,7 @@ export class AppComponent implements OnInit, OnDestroy {
       'SynchronizeUserFinished',
       (payload: User) => {
         console.log('User synchronized:', payload);
-        this.store.dispatch(userSynchronize({ user: payload }));
+        this.store.dispatch(synchronizeUser({ user: payload }));
       }
     );
   }
