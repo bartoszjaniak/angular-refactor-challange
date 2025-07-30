@@ -10,8 +10,13 @@
 
   <a routerLink="/" class="go-back">Go back to list</a>
 </div>
-} @else {
-  <span>loading...</span>
+}
+
+@if (currentUserError$ | async; as error) {
+<div class="error">
+  <h3>Error</h3>
+  <p>{{error.statusText}}</p>
+</div>
 }
 
 
