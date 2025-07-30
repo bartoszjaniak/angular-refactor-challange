@@ -8,6 +8,9 @@ import {
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { CommonModule } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { User } from '../models/user.model';
 import { WebsocketService } from '../services/websocket.service';
 import { loadCurrentUser, synchronizeUser } from '../store/user/user.actions';
@@ -31,7 +34,7 @@ import { I18NextModule } from 'angular-i18next';
   selector: 'app-user',
   templateUrl: 'user.component.html',
   styleUrls: ['user.component.scss'],
-  imports: [CommonModule, RouterModule, I18NextModule],
+  imports: [CommonModule, RouterModule, I18NextModule, MatCardModule, MatButtonModule, MatIconModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserComponent implements OnInit, OnDestroy {

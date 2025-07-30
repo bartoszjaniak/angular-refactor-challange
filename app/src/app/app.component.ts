@@ -66,7 +66,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.messageHandler.registerHandler('ReceiveMessage', (payload: any) => {
        const timeFromUTC = new Date(payload).toLocaleTimeString();
       const message = this.i18NextService.t('notification.message', { message: timeFromUTC });
-      const closeText = this.i18NextService.t('notification.close');
+      const closeText = this.i18NextService.t('notification.ok');
       this.snackBar.open(message, closeText, {
         duration: 3000,
         horizontalPosition: 'right',
@@ -75,8 +75,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.messageHandler.registerHandler(
       'SynchronizeUserFinished',
-      (payload: User) => {
-        console.log('User synchronized:', payload);
+      (payload: User) => {        
+        const message = this.i18NextService.t('notification.synchronized');
+        const closeText = this.i18NextService.t('notification.ok');
+        this.snackBar.open(message, closeText, {
+          duration: 3000,
+          horizontalPosition: 'right',
+        });
         this.store.dispatch(synchronizeUser({ user: payload }));
       }
     );

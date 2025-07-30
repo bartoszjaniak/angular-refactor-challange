@@ -28,8 +28,9 @@
     "error": "Error"
   },
     "notification": {
-    "close": "Close",
-    "message": "Server synchronization recived: {{message}}"
+    "ok": "OK",
+    "message": "Server synchronization recived: {{message}}",
+    "synchronized": "User data refreshed"
   },
   "common": {
     "save": "Save",

@@ -28,8 +28,9 @@
     "error": "Błąd"
   },
   "notification": {
-    "close": "Zamknij",
-    "message": "Otrzymano synchronizację od serwera: {{message}}"
+    "ok": "OK",
+    "message": "Otrzymano synchronizację od serwera: {{message}}",
+    "synchronized": "Dane użytkownika odświeżone"
   },
   "common": {
     "save": "Zapisz",

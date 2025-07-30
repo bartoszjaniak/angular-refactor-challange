@@ -1,22 +1,34 @@
 @if (currentUser$ | async; as user) {
-<div class="user">
-  <h3>{{ 'user.username' | i18next }}: {{user.name}}</h3>
-  <h4>{{ 'user.protected_projects' | i18next }}: {{user.protectedProjects}}</h4>
-  <div class="buttons">
-    <button (click)="synchronizeUser(user)">{{ 'user.synchronize' | i18next }}</button>
+<div class="user-container">
+  <div class="user-header">
+    <a mat-button class="go-back" routerLink="/">
+      <mat-icon>arrow_back</mat-icon>
+      <span>{{ 'user.go_back' | i18next }}</span>
+    </a>
+  </div>
+  <div class="user-info">
+    <h3>{{ 'user.username' | i18next }}: <span>{{user.name}}</span></h3>
+    <h4>{{ 'user.protected_projects' | i18next }}: <span>{{user.protectedProjects}}</span></h4>
+  </div>
+  <div class="user-actions">
+    <button mat-raised-button color="primary" (click)="synchronizeUser(user)">
+      {{ 'user.synchronize' | i18next }}
+    </button>
     @if (isCurrentUserFavorite$ | async) {
-      <button (click)="removeFromFavorites(user)">{{ 'favorites.remove' | i18next }}</button>
+      <button mat-stroked-button color="warn" (click)="removeFromFavorites(user)">
+        {{ 'favorites.remove' | i18next }}
+      </button>
     } @else {
-      <button (click)="addToFavorites(user)">{{ 'favorites.add' | i18next }}</button>
+      <button mat-stroked-button color="accent" (click)="addToFavorites(user)">
+        {{ 'favorites.add' | i18next }}
+      </button>
     }
   </div>
-
-  <a routerLink="/" class="go-back">{{ 'user.go_back' | i18next }}</a>
 </div>
 }
 
 @if (currentUserError$ | async; as error) {
-<div class="error">
+<div class="error-card">
   <h3>{{ 'user.error' | i18next }}</h3>
   <p>{{error.statusText}}</p>
 </div>
