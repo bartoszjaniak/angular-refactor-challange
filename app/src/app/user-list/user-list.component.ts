@@ -75,7 +75,6 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
   }
   ngAfterViewInit(): void {
     this.store.dispatch(loadUsers());
-    this.store.dispatch(loadFavoritesFromStorage());
 
     this.filter.valueChanges.pipe(
       debounceTime(300),
