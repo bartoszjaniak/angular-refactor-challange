@@ -32,9 +32,12 @@ wss.on('connection', (ws) => {
     const msg = JSON.parse(res)
     console.log(msg)
     if (msg.type === 'SynchronizeUser' && msg.payload >= 0) {
-      MOCK_USERS[msg.payload] = {
-        ...MOCK_USERS[msg.payload],
-        protectedProjects: MOCK_USERS[msg.payload].protectedProjects + Math.floor(Math.random() * 10)
+      const index = MOCK_USERS.findIndex(u => u.id === msg.payload)
+      if (index < 0) return;
+
+      MOCK_USERS[index] = {
+        ...MOCK_USERS[index],
+        protectedProjects: MOCK_USERS[index].protectedProjects + Math.floor(Math.random() * 10)
       }
 
       ws.send(JSON.stringify({

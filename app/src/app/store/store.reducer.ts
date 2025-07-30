@@ -6,6 +6,7 @@ import {
   setPagination,
   setSort,
   usersSuccesfullyLoaded,
+  userSynchronize,
 } from './store.actions';
 import { User } from 'app/models/user.model';
 
@@ -62,5 +63,9 @@ export const userReducer = createReducer(
     ...state,
     users,
     total,
+  })),
+  on(userSynchronize, (state, { user }) => ({
+    ...state,
+    users: state.users.map(u => u.id === user.id ? user : u),
   }))
 );

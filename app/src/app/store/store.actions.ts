@@ -11,3 +11,5 @@ export const usersSuccesfullyLoaded = createAction('[User] Users Successfully Lo
 
 export const addUserToFavorite = createAction('[User] Add user to favorite', props<{ user: User }>());
 export const removeUserFromFavorite = createAction('[User] Remove user from favorite', props<{ user: User }>());
+
+export const userSynchronize = createAction('[User] User Synchronize', props<{ user: User }>());
