@@ -27,6 +27,10 @@
     "go_back": "Wróć do listy",
     "error": "Błąd"
   },
+  "notification": {
+    "close": "Zamknij",
+    "message": "Otrzymano synchronizację od serwera: {{message}}"
+  },
   "common": {
     "save": "Zapisz",
     "cancel": "Anuluj",

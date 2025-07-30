@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, ChangeDetectorRef, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { WebsocketService } from './services/websocket.service';
 import {
@@ -12,6 +12,7 @@ import { User } from './models/user.model';
 import { Subscription } from 'rxjs';
 import { I18NextModule, I18NEXT_SERVICE, ITranslationService } from 'angular-i18next';
 import { TranslationService } from './config/i18n.config';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-root',
@@ -22,6 +23,9 @@ import { TranslationService } from './config/i18n.config';
 export class AppComponent implements OnInit, OnDestroy {
   title = 'app';
   private wsSub!: Subscription;
+
+  private snackBar = inject(MatSnackBar);
+  private i18NextService = inject(I18NEXT_SERVICE);
 
   constructor(
     private websocketService: WebsocketService,
@@ -60,7 +64,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private registerMessageHandlers() {
     this.messageHandler.registerHandler('ReceiveMessage', (payload: any) => {
-      console.log('Toast notification:', payload);
+       const timeFromUTC = new Date(payload).toLocaleTimeString();
+      const message = this.i18NextService.t('notification.message', { message: timeFromUTC });
+      const closeText = this.i18NextService.t('notification.close');
+      this.snackBar.open(message, closeText, {
+        duration: 3000,
+        horizontalPosition: 'right',
+      });
     });
 
     this.messageHandler.registerHandler(

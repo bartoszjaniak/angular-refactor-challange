@@ -27,6 +27,10 @@
     "go_back": "Go back to list",
     "error": "Error"
   },
+    "notification": {
+    "close": "Close",
+    "message": "Server synchronization recived: {{message}}"
+  },
   "common": {
     "save": "Save",
     "cancel": "Cancel",
