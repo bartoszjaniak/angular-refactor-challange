@@ -1,1 +1,9 @@
+<header class="app-header">
+  <h1>{{ 'welcome' | i18next }}</h1>
+  <div class="language-switcher">
+    <button (click)="switchLanguage('en')">English</button>
+    <button (click)="switchLanguage('pl')">Polski</button>
+  </div>
+</header>
+
 <router-outlet></router-outlet>

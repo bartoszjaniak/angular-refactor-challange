@@ -1,0 +1,36 @@
+{
+  "welcome": "Welcome, Strainger!",
+  "welcome_user": "Welcome, {{name}}!",
+  "users": {
+    "title": "User List",
+    "loading": "Loading users...",
+    "error": "Error loading users",
+    "no_users": "No users found",
+    "search_placeholder": "Search user",
+    "search_hint": "Enter name, role or project",
+    "name": "Name",
+    "role": "Role",
+    "protected_projects": "Protected projects",
+    "go_to_details": "Go to user details {{name}}"
+  },
+  "favorites": {
+    "add": "Add to favorites",
+    "remove": "Remove from favorites",
+    "title": "Favorite",
+    "marked_as_favorite": "User marked as favorite",
+    "not_marked_as_favorite": "User not marked as favorite"
+  },
+  "user": {
+    "username": "Username",
+    "protected_projects": "Protected projects",
+    "synchronize": "Synchronize",
+    "go_back": "Go back to list",
+    "error": "Error"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit"
+  }
+}

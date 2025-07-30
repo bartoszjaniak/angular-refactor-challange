@@ -12,6 +12,8 @@ import { provideStoreDevtools } from '@ngrx/store-devtools'
 import { UsersEffects } from './store/users/users.effects'
 import { UserEffects } from './store/user/user.effects'
 import { FavoritesEffects } from './store/favorites/favorites.effects'
+import { I18N_PROVIDERS } from './config/i18n.config';
+import { I18NextModule } from 'angular-i18next';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -24,6 +26,8 @@ export const appConfig: ApplicationConfig = {
       favorites: favoritesReducer 
     }),
     provideEffects([UsersEffects, UserEffects, FavoritesEffects]),
-    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() })
+    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
+    I18NextModule.forRoot().providers || [],
+    ...I18N_PROVIDERS
 ]
 };

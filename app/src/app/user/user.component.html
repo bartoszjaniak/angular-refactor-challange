@@ -1,23 +1,23 @@
 @if (currentUser$ | async; as user) {
 <div class="user">
-  <h3>Username: {{user.name}}</h3>
-  <h4>Protected projects: {{user.protectedProjects}}</h4>
+  <h3>{{ 'user.username' | i18next }}: {{user.name}}</h3>
+  <h4>{{ 'user.protected_projects' | i18next }}: {{user.protectedProjects}}</h4>
   <div class="buttons">
-    <button (click)="synchronizeUser(user)">Synchronize</button>
+    <button (click)="synchronizeUser(user)">{{ 'user.synchronize' | i18next }}</button>
     @if (isCurrentUserFavorite$ | async) {
-      <button (click)="removeFromFavorites(user)">Remove from favorites</button>
+      <button (click)="removeFromFavorites(user)">{{ 'favorites.remove' | i18next }}</button>
     } @else {
-      <button (click)="addToFavorites(user)">Add to favorites</button>
+      <button (click)="addToFavorites(user)">{{ 'favorites.add' | i18next }}</button>
     }
   </div>
 
-  <a routerLink="/" class="go-back">Go back to list</a>
+  <a routerLink="/" class="go-back">{{ 'user.go_back' | i18next }}</a>
 </div>
 }
 
 @if (currentUserError$ | async; as error) {
 <div class="error">
-  <h3>Error</h3>
+  <h3>{{ 'user.error' | i18next }}</h3>
   <p>{{error.statusText}}</p>
 </div>
 }

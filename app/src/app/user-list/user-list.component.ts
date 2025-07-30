@@ -37,8 +37,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { Store } from '@ngrx/store';
 import { selectTotal, selectUsers } from '../store/users/users.selectors';
 import { selectFavoriteUserIds } from '../store/favorites/favorites.selectors';
-import { loadFavoritesFromStorage } from '../store/favorites/favorites.actions';
 import { loadUsers, setFilter, setPagination, setSort } from '../store/users/users.actions';
+import { I18NextModule } from 'angular-i18next';
 
 @Component({
   selector: 'app-user-list',
@@ -65,6 +65,7 @@ import { loadUsers, setFilter, setPagination, setSort } from '../store/users/use
     MatInputModule,
     MatSortModule,
     MatPaginatorModule,
+    I18NextModule,
   ],
 })
 export class UserListComponent implements AfterViewInit, OnDestroy {

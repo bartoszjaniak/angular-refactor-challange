@@ -1,0 +1,36 @@
+{
+  "welcome": "Witaj, Nieznajomy!",
+  "welcome_user": "Witaj, {{name}}!",
+  "users": {
+    "title": "Lista użytkowników",
+    "loading": "Ładowanie użytkowników...",
+    "error": "Błąd podczas ładowania użytkowników",
+    "no_users": "Nie znaleziono użytkowników",
+    "search_placeholder": "Wyszukaj użytkownika",
+    "search_hint": "Wpisz imię, rolę lub projekt",
+    "name": "Imię",
+    "role": "Rola",
+    "protected_projects": "Chronione projekty",
+    "go_to_details": "Przejdź do szczegółów użytkownika {{name}}"
+  },
+  "favorites": {
+    "add": "Dodaj do ulubionych",
+    "remove": "Usuń z ulubionych",
+    "title": "Ulubione",
+    "marked_as_favorite": "Użytkownik oznaczony jako ulubiony",
+    "not_marked_as_favorite": "Użytkownik nie jest oznaczony jako ulubiony"
+  },
+  "user": {
+    "username": "Nazwa użytkownika",
+    "protected_projects": "Chronione projekty",
+    "synchronize": "Synchronizuj",
+    "go_back": "Wróć do listy",
+    "error": "Błąd"
+  },
+  "common": {
+    "save": "Zapisz",
+    "cancel": "Anuluj",
+    "delete": "Usuń",
+    "edit": "Edytuj"
+  }
+}

@@ -25,12 +25,13 @@ import {
   selectIsUserFavorite,
 } from '../store/favorites/favorites.selectors';
 import { map, takeUntil, Subject, switchMap } from 'rxjs';
+import { I18NextModule } from 'angular-i18next';
 
 @Component({
   selector: 'app-user',
   templateUrl: 'user.component.html',
   styleUrls: ['user.component.scss'],
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, I18NextModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserComponent implements OnInit, OnDestroy {

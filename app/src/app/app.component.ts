@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, ChangeDetectorRef } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { WebsocketService } from './services/websocket.service';
 import {
@@ -10,10 +10,12 @@ import { synchronizeUser } from './store/user/user.actions';
 import { loadFavoritesFromStorage } from './store/favorites/favorites.actions';
 import { User } from './models/user.model';
 import { Subscription } from 'rxjs';
+import { I18NextModule, I18NEXT_SERVICE, ITranslationService } from 'angular-i18next';
+import { TranslationService } from './config/i18n.config';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, I18NextModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
@@ -24,7 +26,7 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private websocketService: WebsocketService,
     private messageHandler: WebsocketMessageHandlerService,
-    private store: Store
+    private store: Store,
   ) {}
 
   ngOnInit() {
@@ -49,6 +51,11 @@ export class AppComponent implements OnInit, OnDestroy {
     if (this.wsSub) {
       this.wsSub.unsubscribe();
     }
+  }
+
+  switchLanguage(language: string) {  
+    localStorage.setItem('i18nextLng', language);
+    window.location.reload();
   }
 
   private registerMessageHandlers() {
