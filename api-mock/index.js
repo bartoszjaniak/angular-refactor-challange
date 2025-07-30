@@ -42,7 +42,7 @@ wss.on('connection', (ws) => {
 
       ws.send(JSON.stringify({
         type: 'SynchronizeUserFinished',
-        payload: MOCK_USERS[msg.payload]
+        payload: MOCK_USERS[index]
       }))
     }
     console.log(`Received from client: ${msg}`);

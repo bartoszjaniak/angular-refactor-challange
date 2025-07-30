@@ -26,3 +26,18 @@ export const selectTotal = createSelector(
   selectCounterState,
   (state) => state.total
 );
+
+export const selectCurrentUser = createSelector(
+  selectCounterState,
+  (state) => state.currentUser
+);
+
+export const selectCurrentUserLoading = createSelector(
+  selectCounterState,
+  (state) => state.currentUserLoading
+);
+
+export const selectCurrentUserError = createSelector(
+  selectCounterState,
+  (state) => state.currentUserError
+);

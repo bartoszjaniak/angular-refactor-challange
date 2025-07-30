@@ -7,12 +7,18 @@ import {
   setSort,
   usersSuccesfullyLoaded,
   userSynchronize,
+  loadCurrentUser,
+  currentUserSuccessfullyLoaded,
+  currentUserLoadFailed,
 } from './store.actions';
 import { User } from 'app/models/user.model';
 
 export interface State {
   users: User[];
   favoriteUsers: User[];
+  currentUser: User | null;
+  currentUserLoading: boolean;
+  currentUserError: any;
   filter: string;
   sort: string;
   pagination: {
@@ -25,6 +31,9 @@ export interface State {
 export const initialState: State = {
   users: [],
   favoriteUsers: [],
+  currentUser: null,
+  currentUserLoading: false,
+  currentUserError: null,
   filter: '',
   sort: '',
   pagination: {
@@ -67,5 +76,23 @@ export const userReducer = createReducer(
   on(userSynchronize, (state, { user }) => ({
     ...state,
     users: state.users.map(u => u.id === user.id ? user : u),
+    currentUser: state.currentUser && state.currentUser.id === user.id ? user : state.currentUser,
+  })),
+  on(loadCurrentUser, (state) => ({
+    ...state,
+    currentUserLoading: true,
+    currentUserError: null,
+  })),
+  on(currentUserSuccessfullyLoaded, (state, { user }) => ({
+    ...state,
+    currentUser: user,
+    currentUserLoading: false,
+    currentUserError: null,
+  })),
+  on(currentUserLoadFailed, (state, { error }) => ({
+    ...state,
+    currentUser: null,
+    currentUserLoading: false,
+    currentUserError: error,
   }))
 );

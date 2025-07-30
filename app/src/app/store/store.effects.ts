@@ -1,13 +1,22 @@
 import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { EMPTY } from 'rxjs';
-import { map, catchError, switchMap, withLatestFrom, tap } from 'rxjs/operators';
+import {
+  map,
+  catchError,
+  switchMap,
+  withLatestFrom,
+  tap,
+} from 'rxjs/operators';
 import {
   loadUsers,
   setFilter,
   setPagination,
   setSort,
   usersSuccesfullyLoaded,
+  loadCurrentUser,
+  currentUserSuccessfullyLoaded,
+  currentUserLoadFailed,
 } from './store.actions';
 import { UserService } from '../services/user.service';
 import { Store } from '@ngrx/store';
@@ -30,6 +39,18 @@ export class UsersEffects {
             map(({ users, total }) => usersSuccesfullyLoaded({ users, total })),
             catchError(() => EMPTY)
           )
+      )
+    );
+  });
+
+  loadCurrentUser$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(loadCurrentUser),
+      switchMap(({ userId }) =>
+        this.userService.getUser(userId).pipe(
+          map((user) => currentUserSuccessfullyLoaded({ user })),
+          catchError((error) => [currentUserLoadFailed({ error })])
+        )
       )
     );
   });
