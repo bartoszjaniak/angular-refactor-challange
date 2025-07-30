@@ -9,8 +9,7 @@ export const setPagination = createAction('[User] Set Pagination', props<{ pageI
 
 export const usersSuccesfullyLoaded = createAction('[User] Users Successfully Loaded', props<{ users: User[], total: number }>());
 
-export const addUserToFavorite = createAction('[User] Add user to favorite', props<{ user: User }>());
-export const removeUserFromFavorite = createAction('[User] Remove user from favorite', props<{ user: User }>());
+
 
 export const userSynchronize = createAction('[User] User Synchronize', props<{ user: User }>());
 

@@ -10,18 +10,21 @@ import { Store } from '@ngrx/store';
 import { CommonModule } from '@angular/common';
 import { User } from '../models/user.model';
 import { WebsocketService } from '../services/websocket.service';
+import { loadCurrentUser } from '../store/store.actions';
 import {
-  removeUserFromFavorite,
-  addUserToFavorite,
-  loadCurrentUser,
-} from '../store/store.actions';
-import {
-  selectFavoriteUsers,
   selectCurrentUser,
   selectCurrentUserLoading,
   selectCurrentUserError,
 } from '../store/store.selectors';
-import { map, takeUntil, Subject } from 'rxjs';
+import {
+  addUserToFavorites,
+  removeUserFromFavorites,
+  loadFavoritesFromStorage,
+} from '../store/favorites/favorites.actions';
+import {
+  selectIsUserFavorite,
+} from '../store/favorites/favorites.selectors';
+import { map, takeUntil, Subject, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-user',
@@ -37,12 +40,20 @@ export class UserComponent implements OnInit, OnDestroy {
 
   private destroyed$ = new Subject<void>();
 
-  favoriteUsers$ = this.store.select(selectFavoriteUsers);
   currentUser$ = this.store.select(selectCurrentUser);
   currentUserLoading$ = this.store.select(selectCurrentUserLoading);
   currentUserError$ = this.store.select(selectCurrentUserError);
 
+  isCurrentUserFavorite$ = this.currentUser$.pipe(
+    switchMap((user) => 
+      user ? this.store.select(selectIsUserFavorite(user.id)) : [false]
+    )
+  );
+
   ngOnInit() {
+    // Ładujemy ulubione z localStorage przy inicjalizacji
+    this.store.dispatch(loadFavoritesFromStorage());
+    
     this.route.params.pipe(
       map((params) => params['id'] as string),
       takeUntil(this.destroyed$)
@@ -65,10 +76,10 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   removeFromFavorites(user: User) {
-    this.store.dispatch(removeUserFromFavorite({ user: user }));
+    this.store.dispatch(removeUserFromFavorites({ userId: user.id }));
   }
 
   addToFavorites(user: User) {
-    this.store.dispatch(addUserToFavorite({ user: user }));
+    this.store.dispatch(addUserToFavorites({ userId: user.id }));
   }
 }

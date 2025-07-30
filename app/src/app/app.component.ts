@@ -7,6 +7,7 @@ import {
 } from './services/websocket-message-handler.service';
 import { Store } from '@ngrx/store';
 import { userSynchronize } from './store/store.actions';
+import { loadFavoritesFromStorage } from './store/favorites/favorites.actions';
 import { User } from './models/user.model';
 import { Subscription } from 'rxjs';
 
@@ -27,6 +28,9 @@ export class AppComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    // Ładujemy ulubione z localStorage przy starcie aplikacji
+    this.store.dispatch(loadFavoritesFromStorage());
+    
     this.registerMessageHandlers();
 
     this.wsSub = this.websocketService

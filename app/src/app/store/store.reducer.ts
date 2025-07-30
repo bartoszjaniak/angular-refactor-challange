@@ -1,7 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
 import {
-  addUserToFavorite,
-  removeUserFromFavorite,
   setFilter,
   setPagination,
   setSort,
@@ -15,7 +13,6 @@ import { User } from 'app/models/user.model';
 
 export interface State {
   users: User[];
-  favoriteUsers: User[];
   currentUser: User | null;
   currentUserLoading: boolean;
   currentUserError: any;
@@ -30,7 +27,6 @@ export interface State {
 
 export const initialState: State = {
   users: [],
-  favoriteUsers: [],
   currentUser: null,
   currentUserLoading: false,
   currentUserError: null,
@@ -60,14 +56,7 @@ export const userReducer = createReducer(
       pageSize,
     },
   })),
-  on(addUserToFavorite, (state, { user }) => ({
-    ...state,
-    favoriteUsers: [...state.favoriteUsers, user],
-  })),
-  on(removeUserFromFavorite, (state, { user }) => ({
-    ...state,
-    favoriteUsers: state.favoriteUsers.filter((u) => u.id !== user.id),
-  })),
+
   on(usersSuccesfullyLoaded, (state, { users, total }) => ({
     ...state,
     users,

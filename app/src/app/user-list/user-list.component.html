@@ -37,13 +37,20 @@
     <td mat-cell *matCellDef="let user">{{ user.protectedProjects }}</td>
   </ng-container>
 
+  <ng-container matColumnDef="favorite">
+    <th mat-header-cell *matHeaderCellDef>Favorite</th>
+    <td mat-cell *matCellDef="let user">
+      {{ user.isFavorite ? '⭐' : '' }}
+    </td>
+  </ng-container>
+
   <tr
     mat-header-row
-    *matHeaderRowDef="['name', 'role', 'protectedProjects']"
+    *matHeaderRowDef="['name', 'role', 'protectedProjects', 'favorite']"
   ></tr>
   <tr
     mat-row
-    *matRowDef="let row; columns: ['name', 'role', 'protectedProjects']"
+    *matRowDef="let row; columns: ['name', 'role', 'protectedProjects', 'favorite']"
   ></tr>
 </table>
 <mat-paginator

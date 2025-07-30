@@ -4,8 +4,11 @@
   <h4>Protected projects: {{user.protectedProjects}}</h4>
   <div class="buttons">
     <button (click)="synchronizeUser(user)">Synchronize</button>
-    <!-- <button *ngIf="isUserFavorite(favoriteUsers$ | async)" (click)="removeFromFavorites()">Remove from favorites</button>
-    <button *ngIf="isNotUserFavorite(favoriteUsers$ | async)" (click)="addToFavorites()">Add to favorites</button> -->
+    @if (isCurrentUserFavorite$ | async) {
+      <button (click)="removeFromFavorites(user)">Remove from favorites</button>
+    } @else {
+      <button (click)="addToFavorites(user)">Add to favorites</button>
+    }
   </div>
 
   <a routerLink="/" class="go-back">Go back to list</a>

@@ -4,18 +4,14 @@ import {
   Component,
   inject,
   OnDestroy,
-  OnInit,
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { UserService } from '../services/user.service';
+
 import {
-  BehaviorSubject,
   combineLatest,
   debounceTime,
   map,
-  startWith,
   Subject,
-  switchMap,
   takeUntil,
   tap,
 } from 'rxjs';
@@ -40,6 +36,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { Store } from '@ngrx/store';
 import { selectTotal, selectUsers } from '../store/store.selectors';
+import { selectFavoriteUserIds } from '../store/favorites/favorites.selectors';
+import { loadFavoritesFromStorage } from '../store/favorites/favorites.actions';
 import { loadUsers, setFilter, setPagination, setSort } from '../store/store.actions';
 
 @Component({
@@ -77,6 +75,7 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
   }
   ngAfterViewInit(): void {
     this.store.dispatch(loadUsers());
+    this.store.dispatch(loadFavoritesFromStorage());
 
     this.filter.valueChanges.pipe(
       debounceTime(300),
@@ -88,9 +87,18 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
 
   private store = inject(Store);
 
-  protected users$ = this.store
-    .select(selectUsers)
-    .pipe(map((users) => new MatTableDataSource(users)));
+  protected users$ = combineLatest([
+    this.store.select(selectUsers),
+    this.store.select(selectFavoriteUserIds)
+  ]).pipe(
+    map(([users, favoriteIds]) => {
+      const usersWithFavoriteFlag = users.map(user => ({
+        ...user,
+        isFavorite: favoriteIds.has(user.id)
+      }));
+      return new MatTableDataSource(usersWithFavoriteFlag);
+    })
+  );
 
   protected total$ = this.store.select(selectTotal);
 
