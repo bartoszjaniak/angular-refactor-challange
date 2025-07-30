@@ -46,7 +46,6 @@
     *matRowDef="let row; columns: ['name', 'role', 'protectedProjects']"
   ></tr>
 </table>
-<!-- Musiałem użyć zmyślonej liczby bo api nie udostępnia ilości rekordów -->
 <mat-paginator
   (page)="setPagination($event)"
   [length]="total$ | async"
