@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, LOCALE_ID, Injectable } from '@angular/core';
+import { APP_INITIALIZER, LOCALE_ID, Injectable, inject } from '@angular/core';
 import { I18NEXT_SERVICE, ITranslationService, defaultInterpolationFormat, I18NextModule } from 'angular-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
@@ -20,6 +20,7 @@ const i18nextOptions = {
 })
 export class TranslationService {
   private translationsCache = new Map<string, any>();
+  private i18next = inject(I18NEXT_SERVICE);
 
   constructor() {}
 
@@ -38,6 +39,17 @@ export class TranslationService {
       return {};
     }
   }
+
+  async changeLanguage(newLanguage: string): Promise<void> {
+    // Załaduj nowe tłumaczenia
+    const translations = await this.loadTranslations(newLanguage);
+    
+    // Dodaj je do i18next
+    this.i18next.addResourceBundle(newLanguage, 'translation', translations, true, true);
+    
+    // Zmień język - LanguageDetector automatycznie zapisze to w localStorage
+    await this.i18next.changeLanguage(newLanguage);
+  }
 }
 
 export function appInit(i18next: ITranslationService, translationService: TranslationService) {
@@ -52,8 +64,6 @@ export function appInit(i18next: ITranslationService, translationService: Transl
     const currentLanguage = i18next.language || initialLanguage;
     const translations = await translationService.loadTranslations(currentLanguage);
     i18next.addResourceBundle(currentLanguage, 'translation', translations, true, true);
-
-    // Usunięto preload innych języków
   };
 }
 
