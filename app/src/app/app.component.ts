@@ -21,12 +21,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit, OnDestroy {
-  title = 'app';
   private wsSub!: Subscription;
 
   private snackBar = inject(MatSnackBar);
   private i18NextService = inject(I18NEXT_SERVICE);
-  private cdr = inject(ChangeDetectorRef);
 
   constructor(
     private websocketService: WebsocketService,
@@ -64,7 +62,6 @@ export class AppComponent implements OnInit, OnDestroy {
     try {
       await this.translationService.changeLanguage(language);
       window.location.reload();
-      // Nie potrzeba już przeładowania strony - język zmieni się dynamicznie
     } catch (error) {
       console.error('Failed to change language:', error);
     }
