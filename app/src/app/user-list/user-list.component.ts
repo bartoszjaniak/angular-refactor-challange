@@ -74,6 +74,7 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
   }
+  
   ngAfterViewInit(): void {
     this.store.dispatch(loadUsers());
 
