@@ -33,7 +33,7 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { Store } from '@ngrx/store';
 import { selectTotal, selectUsers } from '../store/users/users.selectors';
 import { selectFavoriteUserIds } from '../store/favorites/favorites.selectors';
@@ -114,7 +114,7 @@ export class UserListComponent implements AfterViewInit, OnDestroy {
     );
   }
 
-  protected setPagination(pagination: { pageIndex: number; pageSize: number }) {
+  protected setPagination(pagination: PageEvent) {
     this.store.dispatch(setPagination(pagination));
   }
 

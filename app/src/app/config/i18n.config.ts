@@ -22,7 +22,7 @@ export class TranslationService {
   private translationsCache = new Map<string, any>();
   private i18next = inject(I18NEXT_SERVICE);
 
-  constructor() {}
+  constructor() { }
 
   async loadTranslations(language: string): Promise<any> {
     if (this.translationsCache.has(language)) {
@@ -41,27 +41,18 @@ export class TranslationService {
   }
 
   async changeLanguage(newLanguage: string): Promise<void> {
-    // Załaduj nowe tłumaczenia
     const translations = await this.loadTranslations(newLanguage);
-    
-    // Dodaj je do i18next
     this.i18next.addResourceBundle(newLanguage, 'translation', translations, true, true);
-    
-    // Zmień język - LanguageDetector automatycznie zapisze to w localStorage
-    await this.i18next.changeLanguage(newLanguage);
+    await this.i18next.changeLanguage(newLanguage); // it saving new language to localStorage
   }
 }
 
 export function appInit(i18next: ITranslationService, translationService: TranslationService) {
   return async () => {
-    // Pobierz język z localStorage jeśli istnieje
-    let initialLanguage = localStorage.getItem('i18nextLng') || 'en';
-    // Ustaw język w opcjach inicjalizacji
-    const options = { ...i18nextOptions, lng: initialLanguage };
-    await i18next.use(LanguageDetector).init(options);
+    await i18next.use(LanguageDetector).init(i18nextOptions);
 
     // Load initial translations
-    const currentLanguage = i18next.language || initialLanguage;
+    const currentLanguage = i18next.language || i18nextOptions.fallbackLng;
     const translations = await translationService.loadTranslations(currentLanguage);
     i18next.addResourceBundle(currentLanguage, 'translation', translations, true, true);
   };
